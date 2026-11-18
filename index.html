@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instituto Culinario Brûlée | Aprende, crea y disfruta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: { extend: {
+                colors: {
+                    crema: '#FAF4EA', papel: '#FFFBF5', terracota: '#B97A6B',
+                    rosa: '#D9A79A', dorado: '#C6A15B', chocolate: '#2E2A26',
+                    eucalipto: '#7C8B6F', 'chocolate-light': '#4A4540'
+                },
+                fontFamily: {
+                    display: ['"Cormorant Garamond"', 'serif'],
+                    ui: ['"Inter"', 'sans-serif'],
+                }
+            }}
+        }
+    </script>
+    <style>
+        body { background-color: #FAF4EA; color: #2E2A26; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        h1, h2, h3, h4, .font-display { font-family: 'Cormorant Garamond', serif; }
+        .gold-line { height: 1px; background: linear-gradient(90deg, transparent, #C6A15B, transparent); width: 100%; margin: 2rem 0; }
+        .btn-primary { background-color: #B97A6B; color: white; transition: all 0.3s ease; }
+        .btn-primary:hover { background-color: #a06658; transform: translateY(-1px); }
+        .btn-gold { background-color: #C6A15B; color: #2E2A26; transition: all 0.3s ease; }
+        .btn-gold:hover { background-color: #b08d47; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FAF4EA; }
+        ::-webkit-scrollbar-thumb { background: #C6A15B; border-radius: 4px; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #B97A6B; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .img-cover { width: 100%; height: 100%; object-fit: cover; }
+        .chip { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; border-radius: 999px; border: 1px solid #C6A15B; background: #FFFBF5; font-size: 0.85rem; font-weight: 500; transition: all .2s; }
+        .chip:hover { background: #C6A15B; color: #FFFBF5; cursor: pointer; }
+        .tab-btn { padding: .75rem 1rem; border-radius: .5rem; text-align: left; transition: all .2s; }
+        .tab-btn.active { background: #FFFBF5; color: #2E2A26; font-weight: 700; box-shadow: 0 1px 2px rgba(0,0,0,.05); border-left: 4px solid #C6A15B; }
+        .step-line { position: relative; }
+        .step-line::before { content:''; position:absolute; top:50%; left:0; right:0; height:2px; background:#e5e5e5; z-index:0; }
+        .step-line::after { content:''; position:absolute; top:50%; left:0; height:2px; background:#C6A15B; z-index:0; transition: width .4s; }
+        .step-line[data-progress="1"]::after { width: 0%; }
+        .step-line[data-progress="2"]::after { width: 50%; }
+        .step-line[data-progress="3"]::after { width: 100%; }
+        .step-dot { position: relative; z-index: 1; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <nav class="sticky top-0 z-50 bg-papel/95 backdrop-blur-md border-b border-dorado/20 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="router('home')">
+                    <span class="font-display text-3xl font-bold text-chocolate tracking-wide">Brûlée</span>
+                    <i class="fa-solid fa-heart text-dorado text-xs ml-1 mt-[-10px]"></i>
+                </div>
+                <div class="hidden md:flex space-x-6 items-center">
+                    <button onclick="router('catalog')" class="text-chocolate hover:text-terracota font-medium transition">Cursos</button>
+                    <button onclick="router('catalog-online')" class="text-chocolate hover:text-terracota font-medium transition">Online</button>
+                    <button onclick="router('catalog-kids')" class="text-chocolate hover:text-terracota font-medium transition">Kids & Teens</button>
+                    <button onclick="router('store')" class="text-chocolate hover:text-terracota font-medium transition">Tienda</button>
+                    <button onclick="router('blog')" class="text-chocolate hover:text-terracota font-medium transition">Blog</button>
+                    <button onclick="router('verify')" class="text-chocolate hover:text-terracota font-medium transition flex items-center gap-1">
+                        <i class="fa-solid fa-certificate text-dorado"></i> Verificar diploma
+                    </button>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button onclick="router('dashboard')" class="hidden md:flex items-center gap-2 text-chocolate hover:text-terracota" title="Mi portal">
+                        <div class="w-9 h-9 rounded-full bg-rosa/20 flex items-center justify-center border border-rosa">
+                            <i class="fa-solid fa-user text-terracota text-sm"></i>
+                        </div>
+                    </button>
+                    <button onclick="router('booking')" class="btn-primary px-5 py-2 rounded-full font-medium text-sm shadow-lg shadow-terracota/20 hidden sm:block">
+                        Reservar mi lugar
+                    </button>
+                    <button onclick="router('quote')" class="hidden lg:block text-xs text-terracota font-semibold hover:underline">Cotizar evento</button>
+                    <button class="md:hidden text-chocolate text-xl" onclick="document.getElementById('mnav').classList.toggle('hidden')">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="mnav" class="hidden md:hidden pb-4 space-y-2">
+                <button onclick="router('catalog');document.getElementById('mnav').classList.add('hidden')" class="block w-full text-left px-3 py-2 text-chocolate">Cursos</button>
+                <button onclick="router('catalog-online');document.getElementById('mnav').classList.add('hidden')" class="block w-full text-left px-3 py-2 text-chocolate">Online</button>
+                <button onclick="router('catalog-kids');document.getElementById('mnav').classList.add('hidden')" class="block w-full text-left px-3 py-2 text-chocolate">Kids & Teens</button>
+                <button onclick="router('store');document.getElementById('mnav').classList.add('hidden')" class="block w-full text-left px-3 py-2 text-chocolate">Tienda</button>
+                <button onclick="router('blog');document.getElementById('mnav').classList.add('hidden')" class="block w-full text-left px-3 py-2 text-chocolate">Blog</button>
+                <button onclick="router('verify');document.getElementById('mnav').classList.add('hidden')" class="block w-full text-left px-3 py-2 text-chocolate">Verificar diploma</button>
+                <button onclick="router('quote');document.getElementById('mnav').classList.add('hidden')" class="block w-full text-left px-3 py-2 text-chocolate">Cotizar evento</button>
+                <button onclick="router('dashboard');document.getElementById('mnav').classList.add('hidden')" class="block w-full text-left px-3 py-2 text-chocolate">Mi portal</button>
+            </div>
+        </div>
+    </nav>
+
+    <main id="app-root" class="flex-grow relative"></main>
+
+    <footer class="bg-chocolate text-crema pt-16 pb-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div>
+                <h3 class="font-display text-2xl mb-4 text-dorado">Instituto Culinario Brûlée</h3>
+                <p class="text-sm opacity-80 mb-4">La escuela culinaria del Golfo de México. Formando chefs y amantes de la cocina desde 2015.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-dorado hover:text-white"><i class="fa-brands fa-instagram text-xl"></i></a>
+                    <a href="#" class="text-dorado hover:text-white"><i class="fa-brands fa-facebook text-xl"></i></a>
+                    <a href="#" class="text-dorado hover:text-white"><i class="fa-brands fa-tiktok text-xl"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 text-white">Explora</h4>
+                <ul class="space-y-2 text-sm opacity-80">
+                    <li><a href="#" onclick="event.preventDefault();router('catalog')" class="hover:text-dorado">Catálogo de Cursos</a></li>
+                    <li><a href="#" onclick="event.preventDefault();router('club')" class="hover:text-dorado">Club Brûlée</a></li>
+                    <li><a href="#" onclick="event.preventDefault();router('store')" class="hover:text-dorado">Gift Cards & Kits</a></li>
+                    <li><a href="#" onclick="event.preventDefault();router('quote')" class="hover:text-dorado">Eventos Corporativos</a></li>
+                    <li><a href="#" onclick="event.preventDefault();router('verify')" class="hover:text-dorado">Verificar diploma</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 text-white">Contacto</h4>
+                <ul class="space-y-2 text-sm opacity-80">
+                    <li><i class="fa-solid fa-location-dot w-5 text-dorado"></i> Zamora #511, Coatzacoalcos</li>
+                    <li><i class="fa-solid fa-phone w-5 text-dorado"></i> 921 138 8616</li>
+                    <li><i class="fa-solid fa-clock w-5 text-dorado"></i> Lun-Sáb: 9:00 - 20:00</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4 text-white">Newsletter</h4>
+                <p class="text-xs opacity-80 mb-3">Recetas, tips y descuentos exclusivos.</p>
+                <form onsubmit="event.preventDefault(); alert('¡Gracias por suscribirte!');" class="flex flex-col gap-2">
+                    <input type="email" required placeholder="Tu correo electrónico" class="bg-chocolate-light border border-gray-600 rounded px-3 py-2 text-sm focus:border-dorado outline-none text-white">
+                    <button type="submit" class="bg-dorado text-chocolate font-bold py-2 rounded text-sm hover:bg-white transition">Suscribirse</button>
+                </form>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-12 pt-8 text-center text-xs opacity-50">
+            <p>&copy; 2026 Instituto Culinario Brûlée. Todos los derechos reservados. | <a href="#" onclick="event.preventDefault();alert('Aviso de Privacidad (LFPDPPP) — Documento demo')" class="hover:underline">Aviso de Privacidad</a></p>
+        </div>
+    </footer>
+
+    <a id="wa-float" href="https://wa.me/529211388616" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition z-50 flex items-center justify-center w-14 h-14" aria-label="WhatsApp">
+        <i class="fa-brands fa-whatsapp text-3xl"></i>
+    </a>
+
+    <!-- Cookie banner -->
+    <div id="cookie" class="fixed bottom-0 left-0 right-0 z-[60] bg-chocolate text-crema p-4 shadow-2xl hidden">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-4 justify-between">
+            <p class="text-sm">Usamos cookies para mejorar tu experiencia, analizar tráfico y personalizar contenido. <a href="#" onclick="event.preventDefault();alert('Política de cookies (LFPDPPP México)')" class="underline text-dorado">Leer más</a>.</p>
+            <div class="flex gap-2">
+                <button onclick="closeCookies(false)" class="px-4 py-2 text-sm border border-crema/40 rounded-full hover:bg-white/10">Rechazar</button>
+                <button onclick="closeCookies(true)" class="bg-dorado text-chocolate px-5 py-2 rounded-full text-sm font-bold">Aceptar todas</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    /* ============================================================
+       UTILIDADES
+    ============================================================ */
+    function generateImage(prompt, seed = null) {
+        const stop = new Set(['of','the','a','an','in','on','with','and','close','up','shot','photo','photography','style','high','quality','professional','elegant','warm','lighting','soft','background','beautifully','plated','ingredients','around','group','happy','people','holding','certificates','diverse','food','show','through','while','when','just','very','that','this','from','into']);
+        const clean = prompt.toLowerCase().replace(/[^a-z0-9áéíóúñ ]/g, ' ').split(/\s+/).filter(w => w.length > 2 && !stop.has(w));
+        const keywords = [...new Set(clean)].slice(0, 3).join(',') || 'food';
+        const s = seed !== null ? seed : (prompt.length * 17) % 997;
+        return `https://loremflickr.com/900/650/${encodeURIComponent(keywords)}?lock=${s}`;
+    }
+    const IMG_FALLBACK = "onerror=\"this.onerror=null;this.src='https://placehold.co/900x650/FAF4EA/B97A6B?text=Imagen+Br%C3%BBl%C3%A9e';this.classList.add('object-cover')\"";
+    function imgTag(prompt, seed = null, cls = 'w-full h-full object-cover') {
+        return `<img loading="lazy" src="${generateImage(prompt, seed)}" alt="${prompt.replace(/"/g,'')}" class="${cls}" ${IMG_FALLBACK}>`;
+    }
+
+    /* ============================================================
+       MOCK DATA
+    ============================================================ */
+    const courses = [
+        { id:1, title:"Cupcakes de Fresa & Buttercream", category:"Repostería", modalidad:"Presencial", nivel:"Iniciación",
+          duration:"3h", date:"Sáb 12 Dic", time:"09:00 AM", price:850, replayPrice:399, spotsLeft:4, totalSpots:12,
+          chef:"Chef Laura Méndez", description:"Aprende la técnica perfecta para el bizcocho húmedo y una buttercream suave y estable.",
+          rating:4.9, reviews:32, location:"Zamora #511" },
+        { id:2, title:"Pan de Masa Madre Artesanal", category:"Panadería", modalidad:"Presencial", nivel:"Intermedio",
+          duration:"5h", date:"Dom 13 Dic", time:"08:00 AM", price:1200, replayPrice:399, spotsLeft:7, totalSpots:10,
+          chef:"Chef Roberto Díaz", description:"Domina las fermentaciones largas y logra esa corteza crujiente tan codiciada.",
+          rating:5.0, reviews:48, location:"Zamora #511" },
+        { id:3, title:"Pizza Napolitana & Fermentados", category:"Cocina", modalidad:"Presencial", nivel:"Intermedio",
+          duration:"4h", date:"Vie 18 Dic", time:"06:00 PM", price:1450, replayPrice:399, spotsLeft:2, totalSpots:8,
+          chef:"Chef Marco Rossi", description:"El secreto de la masa napolitana auténtica y el uso del horno de leña.",
+          rating:4.8, reviews:27, location:"Zamora #511" },
+        { id:4, title:"Fondant & Decoración", category:"Repostería", modalidad:"Online grabado", nivel:"Intermedio",
+          duration:"3h", date:"Acceso inmediato", time:"Cuando quieras", price:499, replayPrice:0, spotsLeft:null, totalSpots:null,
+          chef:"Chef Ana Paula", description:"Curso grabado con acceso vitalicio: cubre, modela y decora como profesional.",
+          rating:4.9, reviews:112, location:"Online" },
+        { id:5, title:"Mini Chefs: Cookies Locas", category:"Kids & Teens", modalidad:"Presencial", nivel:"Kids (4–9)",
+          duration:"2h", date:"Sáb 19 Dic", time:"11:00 AM", price:650, replayPrice:299, spotsLeft:5, totalSpots:8,
+          chef:"Chef Ana Paula", description:"Diversión garantizada amasando, decorando y comiendo nuestras propias galletas.",
+          rating:5.0, reviews:64, location:"Zamora #511" },
+        { id:6, title:"Técnicas Dulces Teens", category:"Kids & Teens", modalidad:"Presencial", nivel:"Teens (13–17)",
+          duration:"3h", date:"Sáb 20 Dic", time:"04:00 PM", price:750, replayPrice:299, spotsLeft:6, totalSpots:10,
+          chef:"Chef Laura Méndez", description:"Técnicas profesionales adaptadas para jóvenes: temperado, glaseado y presentación.",
+          rating:4.9, reviews:18, location:"Zamora #511" },
+        { id:7, title:"Diplomado Repostería Profesional", category:"Especialidad", modalidad:"Híbrido", nivel:"Avanzado",
+          duration:"6 meses", date:"Inicio Ene 2027", time:"Sábados", price:14900, replayPrice:0, spotsLeft:3, totalSpots:15,
+          chef:"Plantilla Docente", description:"De aficionado a profesional. Cubre técnicas francesas, chocolatería y gestión de negocio.",
+          rating:5.0, reviews:14, location:"Zamora #511 + Online" }
+    ];
+
+    const testimonials = [
+        { name:"Sofía Herrera", course:"Repostería Profesional", text:"Llegué sin saber batir claras. Hoy tengo mi propio pastelería en el centro. Brûlée cambió mi vida.", seed: 201, tag:"Egresada 2024" },
+        { name:"Diego Morales", course:"Pan de Masa Madre", text:"La diferencia es el chef. Paciente, técnico, generoso. Salí sabiendo por qué funciona cada paso.", seed: 202, tag:"Alumno 2025" },
+        { name:"Regina Trujillo", course:"Club Brûlée", text:"Por $199 al mes tengo la escuela entera en mi cocina. Vale cada peso, literal.", seed: 203, tag:"Suscriptora Club" }
+    ];
+
+    const blogPosts = [
+        { title:"5 errores al hacer merengue (y cómo el chef los arregla)", category:"Técnicas", seed:301 },
+        { title:"Emprender una pastelería en el Golfo: costos reales", category:"Emprendimiento", seed:302 },
+        { title:"Cupcakes de fresa: la receta de nuestra clase de sábado", category:"Recetas", seed:303 },
+        { title:"Kids en la cocina: por qué amasar desarrolla el cerebro", category:"Kids & Teens", seed:304 },
+        { title:"Team building que sí funciona: cocinar en equipo", category:"Emprendimiento", seed:305 },
+        { title:"¿Cómo verifico que mi constancia de Brûlée es auténtica?", category:"Vida Brûlée", seed:306 }
+    ];
+
+    const instaFeed = [401,402,403,404,405,406];
+
+    const kitProducts = [
+        { title:"Kit Macarons", price:690, seed:501, desc:"Almendra tamizada, colorantes naturales, manga y boquillas + guía QR al video." },
+        { title:"Kit Pan de Masa Madre", price:450, seed:502, desc:"Masa madre viva, harina de fuerza, banneton y rasqueta + acceso Replay." },
+        { title:"Kit Cupcakes Brûlée", price:520, seed:503, desc:"Todo pesado, delantal infantil y sticker sheet. Perfecto para regalo." },
+        { title:"Gift Card Brûlée", price:1000, seed:504, desc:"Regala cualquier clase. Envío por email o WhatsApp al instante." }
+    ];
+
+    /* ============================================================
+       COMPONENTES
+    ============================================================ */
+    function createCourseCard(c, listView = false) {
+        const seats = c.spotsLeft !== null ? `<div class="text-xs ${c.spotsLeft<3?'text-red-500':'text-gray-500'} font-semibold"><i class="fa-solid fa-users mr-1"></i>Quedan ${c.spotsLeft} lugares</div>` : `<div class="text-xs text-eucalipto font-semibold"><i class="fa-solid fa-infinity mr-1"></i>Acceso vitalicio</div>`;
+        if (listView) {
+            return `<div onclick="router('detail',${c.id})" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden card-hover cursor-pointer flex gap-4 p-4">
+                <div class="w-40 h-32 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">${imgTag(c.title + ' food', c.id*3+11)}</div>
+                <div class="flex-grow">
+                    <div class="flex gap-2 mb-1">
+                        <span class="text-[10px] font-bold text-terracota bg-terracota/10 px-2 py-0.5 rounded uppercase">${c.category}</span>
+                        <span class="text-[10px] font-bold text-eucalipto bg-eucalipto/10 px-2 py-0.5 rounded uppercase">${c.modalidad}</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-chocolate leading-tight">${c.title}</h3>
+                    <p class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-calendar-day mr-1 text-dorado"></i>${c.date} · ${c.time}</p>
+                    <div class="flex justify-between items-center mt-3">
+                        <div>
+                            <span class="text-lg font-bold text-chocolate">$${c.price}</span>
+                            ${c.replayPrice > 0 ? `<span class="text-xs text-gray-400 ml-1">+Replay $${c.replayPrice}</span>` : `<span class="text-xs text-eucalipto ml-1">Replay incluido</span>`}
+                        </div>
+                        ${seats}
+                    </div>
+                </div>
+            </div>`;
+        }
+        return `<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden card-hover flex flex-col h-full cursor-pointer" onclick="router('detail',${c.id})">
+            <div class="relative h-48 bg-gray-100">
+                ${imgTag(c.title + ' food', c.id*3+11)}
+                <div class="absolute top-3 left-3 bg-white/95 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-chocolate uppercase">${c.category}</div>
+                ${c.spotsLeft !== null && c.spotsLeft < 5 ? `<div class="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded text-[10px] font-bold">¡Últimos ${c.spotsLeft}!</div>` : ''}
+                <div class="absolute bottom-3 left-3 bg-white/95 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-terracota"><i class="fa-solid fa-star text-dorado mr-1"></i>${c.rating} (${c.reviews})</div>
+            </div>
+            <div class="p-5 flex-grow flex flex-col">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-bold text-terracota bg-terracota/10 px-2 py-0.5 rounded">${c.nivel}</span>
+                    <span class="text-xs text-gray-400"><i class="fa-regular fa-clock mr-1"></i>${c.duration}</span>
+                </div>
+                <h3 class="font-display text-xl font-bold text-chocolate mb-2 leading-tight">${c.title}</h3>
+                <p class="text-xs text-gray-500 mb-1"><i class="fa-solid fa-location-dot mr-1 text-dorado"></i>${c.location} · ${c.date}</p>
+                <div class="mt-auto pt-3 border-t border-gray-100 flex justify-between items-center">
+                    <div>
+                        <span class="text-lg font-bold text-chocolate">$${c.price}</span>
+                        ${c.replayPrice > 0 ? `<span class="text-[10px] text-gray-400 block">+Replay $${c.replayPrice}</span>` : `<span class="text-[10px] text-eucalipto block">Replay Incluido</span>`}
+                    </div>
+                    <button class="text-xs font-bold text-terracota hover:underline">Reservar →</button>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    /* ============================================================
+       VISTAS
+    ============================================================ */
+    const views = {
+
+    home: () => `
+        <section class="relative h-[85vh] w-full overflow-hidden">
+            <div class="absolute inset-0 bg-chocolate/50 z-10"></div>
+            ${imgTag('pastry chef plating dessert kitchen warm cinematic', 900, 'absolute inset-0 w-full h-full object-cover')}
+            <div class="relative z-20 h-full flex flex-col justify-center items-center text-center px-4 fade-in">
+                <span class="bg-dorado/90 text-chocolate px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-4 shadow-lg">+800 Alumnos · 12 Chefs · 4.9★</span>
+                <h1 class="text-5xl md:text-7xl font-display font-bold text-white mb-4 drop-shadow-md">Aprende, crea y disfruta<br>con Brûlée</h1>
+                <p class="text-xl text-crema/90 mb-8 max-w-2xl font-light">La escuela culinaria del Golfo de México, ahora también en tu casa.</p>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <button onclick="router('catalog')" class="btn-primary px-8 py-3 rounded-full text-lg font-medium shadow-xl hover:scale-105 transition">Ver catálogo</button>
+                    <button onclick="router('store')" class="bg-white/10 backdrop-blur-md border border-white/30 text-white px-8 py-3 rounded-full text-lg font-medium hover:bg-white/20 transition">Regalar una clase</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="max-w-7xl mx-auto px-4 py-16">
+            <!-- PRIMER TIEMPO -->
+            <div class="text-center mb-12">
+                <span class="text-dorado font-display italic text-2xl">Primer Tiempo</span>
+                <h2 class="text-4xl font-bold text-chocolate mt-2">Elige tu camino</h2>
+                <div class="gold-line w-24 mx-auto mt-4"></div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-20">
+                ${[
+                    {cat:'Repostería', seed:101, kw:'cake pastry elegant'},
+                    {cat:'Panadería', seed:102, kw:'sourdough bread artisan'},
+                    {cat:'Cocina', seed:103, kw:'cooking pan dish'},
+                    {cat:'Kids & Teens', seed:104, kw:'kids cooking baking'}
+                ].map(i => `
+                <div onclick="router('catalog')" class="cursor-pointer group relative h-64 rounded-xl overflow-hidden shadow-md card-hover">
+                    ${imgTag(i.kw, i.seed, 'absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-110')}
+                    <div class="absolute inset-0 bg-gradient-to-t from-chocolate/90 to-transparent flex items-end p-6">
+                        <div>
+                            <h3 class="text-white font-display text-2xl mb-1 flex items-center gap-2">${i.cat} <i class="fa-solid fa-heart text-dorado text-xs"></i></h3>
+                            <div class="h-0.5 w-0 bg-dorado group-hover:w-12 transition-all duration-300"></div>
+                        </div>
+                    </div>
+                </div>`).join('')}
+            </div>
+
+            <!-- SEGUNDO TIEMPO -->
+            <div class="bg-papel rounded-2xl p-6 md:p-12 shadow-sm border border-dorado/10 mb-20">
+                <div class="flex justify-between items-end mb-8 flex-wrap gap-3">
+                    <div>
+                        <span class="text-dorado font-display italic text-2xl">Segundo Tiempo</span>
+                        <h2 class="text-3xl font-bold text-chocolate mt-2">Próximamente</h2>
+                    </div>
+                    <button onclick="router('catalog')" class="text-terracota font-medium hover:underline">Ver todas →</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    ${courses.slice(0,3).map(c => createCourseCard(c)).join('')}
+                </div>
+            </div>
+
+            <!-- TERCER TIEMPO -->
+            <div class="text-center mb-12">
+                <span class="text-dorado font-display italic text-2xl">Tercer Tiempo</span>
+                <h2 class="text-4xl font-bold text-chocolate mt-2">La Experiencia Brûlée</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-20">
+                <div class="p-6">
+                    <div class="w-16 h-16 bg-rosa/20 rounded-full flex items-center justify-center mx-auto mb-4 text-terracota text-2xl"><i class="fa-solid fa-fire-burner"></i></div>
+                    <h3 class="font-display text-xl font-bold mb-2">1. Vive la clase</h3>
+                    <p class="text-gray-600 text-sm">Presencial en nuestras instalaciones equipadas o en vivo online.</p>
+                </div>
+                <div class="p-6 relative">
+                    <div class="w-16 h-16 bg-rosa/20 rounded-full flex items-center justify-center mx-auto mb-4 text-terracota text-2xl"><i class="fa-solid fa-video"></i></div>
+                    <h3 class="font-display text-xl font-bold mb-2">2. Brûlée Replay</h3>
+                    <p class="text-gray-600 text-sm">Obtén acceso vitalicio al video de la clase para repasar cuando quieras.</p>
+                </div>
+                <div class="p-6 relative">
+                    <div class="w-16 h-16 bg-rosa/20 rounded-full flex items-center justify-center mx-auto mb-4 text-terracota text-2xl"><i class="fa-solid fa-award"></i></div>
+                    <h3 class="font-display text-xl font-bold mb-2">3. Certificación</h3>
+                    <p class="text-gray-600 text-sm">Recibe tu constancia verificable con QR y únete a nuestra red.</p>
+                </div>
+            </div>
+
+            <!-- PLATO FUERTE -->
+            <div class="rounded-2xl overflow-hidden shadow-xl flex flex-col md:flex-row h-auto md:h-[500px] mb-20">
+                <div class="md:w-1/2 relative h-72 md:h-auto">
+                    ${imgTag('graduation chef students certificates group', 201, 'absolute inset-0 w-full h-full object-cover')}
+                    <div class="absolute inset-0 bg-chocolate/60"></div>
+                    <div class="absolute bottom-8 left-8 text-white">
+                        <h3 class="font-display text-4xl mb-2">Diplomados Profesionales</h3>
+                        <p class="mb-4 opacity-90">Transforma tu pasión en una carrera con aval curricular.</p>
+                        <button onclick="router('catalog')" class="border border-white text-white px-6 py-2 rounded-full hover:bg-white hover:text-chocolate transition">Ver Diplomados</button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 bg-chocolate text-crema p-8 md:p-12 flex flex-col justify-center items-center text-center">
+                    <span class="bg-eucalipto text-white px-3 py-1 rounded text-xs font-bold uppercase mb-4">Suscripción</span>
+                    <h3 class="font-display text-4xl mb-2 text-dorado">Club Brûlée</h3>
+                    <p class="text-3xl font-bold mb-6">$199 <span class="text-sm font-normal opacity-70">/mes</span></p>
+                    <ul class="text-left space-y-3 mb-8 text-sm opacity-90">
+                        <li><i class="fa-solid fa-check text-eucalipto mr-2"></i> Acceso a todo el catálogo online</li>
+                        <li><i class="fa-solid fa-check text-eucalipto mr-2"></i> Descuentos en tiendas aliadas</li>
+                        <li><i class="fa-solid fa-check text-eucalipto mr-2"></i> Prioridad en reservas presenciales</li>
+                    </ul>
+                    <button onclick="router('club')" class="btn-primary w-full py-3 rounded-full font-bold">Unirme al Club</button>
+                </div>
+            </div>
+
+            <!-- POSTRE: TESTIMONIOS + INSTAGRAM -->
+            <div class="text-center mb-12">
+                <span class="text-dorado font-display italic text-2xl">Postre</span>
+                <h2 class="text-4xl font-bold text-chocolate mt-2">Lo que dicen</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                ${testimonials.map(t => `
+                <div class="bg-papel rounded-xl p-6 shadow-sm border border-dorado/10">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-14 h-14 rounded-full overflow-hidden bg-rosa/20 border-2 border-dorado">
+                            ${imgTag('person portrait smiling ' + t.name, t.seed, 'w-full h-full object-cover')}
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-chocolate">${t.name}</h4>
+                            <p class="text-xs text-gray-500">${t.course} · ${t.tag}</p>
+                        </div>
+                    </div>
+                    <div class="flex text-dorado text-sm mb-2">★★★★★</div>
+                    <p class="text-sm text-gray-600 italic">"${t.text}"</p>
+                </div>`).join('')}
+            </div>
+            <div class="mb-20">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-display text-2xl text-chocolate flex items-center gap-2"><i class="fa-brands fa-instagram text-terracota"></i> @brulee.instituto</h3>
+                    <a href="#" class="text-sm text-terracota hover:underline">Seguir →</a>
+                </div>
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+                    ${instaFeed.map((s,i) => `<div class="aspect-square rounded-lg overflow-hidden bg-gray-100 cursor-pointer hover:opacity-80 transition">${imgTag('cooking baking pastry instagram', s)}</div>`).join('')}
+                </div>
+            </div>
+
+            <!-- CAFÉ: BLOG -->
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <span class="text-dorado font-display italic text-2xl">Café</span>
+                    <h2 class="text-3xl font-bold text-chocolate mt-1">Del blog</h2>
+                </div>
+                <button onclick="router('blog')" class="text-terracota font-medium hover:underline">Leer el blog →</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+                ${blogPosts.slice(0,3).map(p => `
+                <article onclick="router('blog')" class="bg-white rounded-xl shadow-sm overflow-hidden card-hover cursor-pointer">
+                    <div class="h-44 bg-gray-100 relative">
+                        ${imgTag(p.title, p.seed)}
+                        <span class="absolute top-3 left-3 bg-white/90 px-2 py-1 text-[10px] font-bold uppercase rounded text-chocolate">${p.category}</span>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-display text-lg font-bold text-chocolate hover:text-terracota">${p.title}</h3>
+                        <span class="text-terracota font-bold text-xs mt-3 inline-block">Leer →</span>
+                    </div>
+                </article>`).join('')}
+            </div>
+
+            <!-- MIGNARDISES: EXTRAS -->
+            <div class="text-center mb-8">
+                <span class="text-dorado font-display italic text-2xl">Mignardises</span>
+                <h2 class="text-3xl font-bold text-chocolate mt-1">Extras</h2>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3 mb-8">
+                <button onclick="router('quote')" class="chip"><i class="fa-solid fa-calculator"></i> Cotizar evento</button>
+                <button onclick="router('quote')" class="chip"><i class="fa-solid fa-users-rectangle"></i> Team building corporativo</button>
+                <button onclick="router('store')" class="chip"><i class="fa-solid fa-gift"></i> Gift cards</button>
+                <button onclick="router('verify')" class="chip"><i class="fa-solid fa-certificate"></i> Verificar un diploma</button>
+            </div>
+        </div>
+    `,
+
+    catalog: (filterType = 'all') => {
+        let preset = { modalidad: [], nivel: [], categoria: [] };
+        if (filterType === 'online') preset.modalidad = ['Online grabado'];
+        if (filterType === 'kids') preset.categoria = ['Kids & Teens'];
+        setTimeout(() => applyFilters(preset), 60);
+        return `
+        <div class="bg-papel min-h-screen pb-20 fade-in">
+            <div class="bg-chocolate text-crema py-12 px-4">
+                <div class="max-w-7xl mx-auto">
+                    <h1 class="font-display text-4xl md:text-5xl mb-3">Nuestros Cursos</h1>
+                    <p class="opacity-80 max-w-2xl">${filterType==='online'?'Catálogo online: aprende a tu ritmo con acceso vitalicio.':filterType==='kids'?'Clases diseñadas para niños y jóvenes.':'Encuentra la clase perfecta. Desde iniciación hasta nivel profesional.'}</p>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
+                <aside class="w-full md:w-64 flex-shrink-0">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 sticky top-24">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-chocolate">Filtros</h3>
+                            <button onclick="applyFilters({modalidad:[],nivel:[],categoria:[]})" class="text-xs text-terracota underline">Limpiar</button>
+                        </div>
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="text-xs font-bold mb-2 text-gray-500 uppercase tracking-wider">Modalidad</h4>
+                                ${['Presencial','Online grabado','En vivo','Híbrido'].map(m => `
+                                <label class="flex items-center gap-2 mb-1.5 cursor-pointer">
+                                    <input type="checkbox" class="filter-cb accent-terracota" data-filter="modalidad" value="${m}" ${preset.modalidad.includes(m)?'checked':''} onchange="applyFilters()">
+                                    <span class="text-sm">${m}</span>
+                                </label>`).join('')}
+                            </div>
+                            <div class="gold-line w-full my-2"></div>
+                            <div>
+                                <h4 class="text-xs font-bold mb-2 text-gray-500 uppercase tracking-wider">Nivel</h4>
+                                ${['Iniciación','Intermedio','Avanzado','Kids (4–9)','Teens (13–17)'].map(n => `
+                                <label class="flex items-center gap-2 mb-1.5 cursor-pointer">
+                                    <input type="checkbox" class="filter-cb accent-terracota" data-filter="nivel" value="${n}" ${preset.nivel.includes(n)?'checked':''} onchange="applyFilters()">
+                                    <span class="text-sm">${n}</span>
+                                </label>`).join('')}
+                            </div>
+                            <div class="gold-line w-full my-2"></div>
+                            <div>
+                                <h4 class="text-xs font-bold mb-2 text-gray-500 uppercase tracking-wider">Categoría</h4>
+                                ${['Repostería','Panadería','Cocina','Kids & Teens','Especialidad'].map(c => `
+                                <label class="flex items-center gap-2 mb-1.5 cursor-pointer">
+                                    <input type="checkbox" class="filter-cb accent-terracota" data-filter="categoria" value="${c}" ${preset.categoria.includes(c)?'checked':''} onchange="applyFilters()">
+                                    <span class="text-sm">${c}</span>
+                                </label>`).join('')}
+                            </div>
+                            <div class="gold-line w-full my-2"></div>
+                            <div>
+                                <h4 class="text-xs font-bold mb-2 text-gray-500 uppercase tracking-wider">Otros</h4>
+                                <label class="flex items-center gap-2 mb-1.5 cursor-pointer"><input type="checkbox" class="accent-terracota"><span class="text-sm">Con Replay</span></label>
+                                <label class="flex items-center gap-2 mb-1.5 cursor-pointer"><input type="checkbox" class="accent-terracota"><span class="text-sm">Con constancia</span></label>
+                                <label class="flex items-center gap-2 mb-1.5 cursor-pointer"><input type="checkbox" class="accent-terracota"><span class="text-sm">Con lugares disponibles</span></label>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                <div class="flex-grow">
+                    <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+                        <span class="text-gray-500 text-sm"><span id="result-count">${courses.length}</span> resultados encontrados</span>
+                        <div class="flex items-center gap-3">
+                            <div class="flex border border-gray-200 rounded-lg overflow-hidden">
+                                <button id="grid-btn" class="px-3 py-1.5 text-sm bg-terracota text-white"><i class="fa-solid fa-grip"></i></button>
+                                <button id="list-btn" class="px-3 py-1.5 text-sm text-gray-500 hover:bg-crema"><i class="fa-solid fa-list"></i></button>
+                            </div>
+                            <select class="border border-gray-200 rounded-lg px-2 py-1.5 bg-white font-medium text-sm text-chocolate focus:border-dorado outline-none cursor-pointer">
+                                <option>Relevancia</option>
+                                <option>Precio: Menor a Mayor</option>
+                                <option>Fecha más cercana</option>
+                                <option>Populares</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="course-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </div>
+            </div>
+        </div>`;
+    },
+
+    courseDetail: (id) => {
+        const c = courses.find(x => x.id == id) || courses[0];
+        return `
+        <div class="bg-papel min-h-screen pb-20 fade-in">
+            <div class="h-[40vh] w-full relative bg-gray-100">
+                ${imgTag(c.title + ' plated professional', c.id*7+1, 'w-full h-full object-cover')}
+                <div class="absolute inset-0 bg-gradient-to-t from-chocolate/80 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 w-full p-6 md:p-8 text-white max-w-7xl mx-auto">
+                    <div class="flex items-center gap-2 mb-2 text-sm font-medium flex-wrap">
+                        <span class="bg-dorado text-chocolate px-2 py-0.5 rounded">${c.category}</span>
+                        <span>•</span><span>${c.nivel}</span><span>•</span><span>${c.modalidad}</span>
+                    </div>
+                    <h1 class="font-display text-4xl md:text-6xl font-bold mb-2">${c.title}</h1>
+                    <div class="flex items-center gap-4 text-sm">
+                        <span><i class="fa-solid fa-star text-dorado"></i> ${c.rating} (${c.reviews} reseñas)</span>
+                        <span><i class="fa-solid fa-location-dot text-dorado"></i> ${c.location}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <div class="lg:col-span-2 space-y-10">
+                    <!-- GALLERY -->
+                    <section>
+                        <div class="grid grid-cols-3 gap-2 rounded-xl overflow-hidden">
+                            ${[1,2,3].map(i => `<div class="aspect-square bg-gray-100">${imgTag(c.title + ' detail kitchen', c.id*7+i+1)}</div>`).join('')}
+                        </div>
+                    </section>
+                    <section>
+                        <h2 class="font-display text-3xl font-bold text-chocolate mb-4">Lo que vas a crear</h2>
+                        <p class="text-gray-600 leading-relaxed mb-6">${c.description} Aprenderás técnicas fundamentales que podrás aplicar en cientos de recetas.</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="flex items-center gap-3 text-chocolate"><i class="fa-solid fa-check text-eucalipto"></i><span>Insumos incluidos</span></div>
+                            <div class="flex items-center gap-3 text-chocolate"><i class="fa-solid fa-check text-eucalipto"></i><span>Mandil Brûlée</span></div>
+                            <div class="flex items-center gap-3 text-chocolate"><i class="fa-solid fa-check text-eucalipto"></i><span>Recetario PDF</span></div>
+                            <div class="flex items-center gap-3 text-chocolate"><i class="fa-solid fa-check text-eucalipto"></i><span>Grupo WhatsApp</span></div>
+                        </div>
+                    </section>
+                    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-start gap-4">
+                        <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-dorado flex-shrink-0">
+                            ${imgTag('chef portrait professional smiling', c.id*13)}
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-xl text-chocolate">${c.chef}</h3>
+                            <p class="text-sm text-gray-500 mb-2">Chef Instructor · ${c.category}</p>
+                            <p class="text-sm text-gray-600 italic">"Mi misión es que pierdas el miedo a la técnica y disfrutes el proceso."</p>
+                        </div>
+                    </section>
+                    <section>
+                        <h2 class="font-display text-3xl font-bold text-chocolate mb-6">Agenda Minuto a Minuto</h2>
+                        <div class="space-y-4 border-l-2 border-dorado/30 pl-6 ml-2">
+                            ${[
+                                ['09:00','Bienvenida & Mise en place','Conocimiento de ingredientes y herramientas.'],
+                                ['09:30','Técnica Principal','Demostración del chef y práctica guiada.'],
+                                ['11:00','Horneado / Cocción','Mientras espera, limpieza y teoría complementaria.'],
+                                ['12:00','Degustación & Empaque','Disfrutamos lo creado y empacamos para llevar.']
+                            ].map(([h,t,s]) => `<div class="relative">
+                                <div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-dorado border-4 border-white"></div>
+                                <h4 class="font-bold text-chocolate">${h} - ${t}</h4>
+                                <p class="text-sm text-gray-500">${s}</p>
+                            </div>`).join('')}
+                        </div>
+                    </section>
+                    <!-- SESIÓN CALENDAR -->
+                    <section>
+                        <h2 class="font-display text-3xl font-bold text-chocolate mb-4">Elige tu sesión</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                            ${[
+                                {d:'12 Dic', t:'09:00', s:4, chef:'Chef Laura'},
+                                {d:'19 Dic', t:'09:00', s:6, chef:'Chef Laura'},
+                                {d:'09 Ene', t:'09:00', s:8, chef:'Chef Laura'},
+                                {d:'16 Ene', t:'09:00', s:10, chef:'Chef Laura'}
+                            ].map((sl,i) => `<button onclick="document.querySelectorAll('.session-slot').forEach(b=>b.classList.remove('border-terracota','bg-terracota/10'));this.classList.add('border-terracota','bg-terracota/10')" class="session-slot text-left p-3 rounded-lg border-2 border-gray-200 hover:border-dorado transition ${i===0?'border-terracota bg-terracota/10':''}">
+                                <div class="font-bold text-chocolate text-sm">${sl.d}</div>
+                                <div class="text-xs text-gray-500">${sl.t} · ${sl.chef}</div>
+                                <div class="text-xs mt-1 ${sl.s<5?'text-red-500':'text-eucalipto'} font-bold">Quedan ${sl.s}</div>
+                            </button>`).join('')}
+                        </div>
+                    </section>
+                    <!-- RESEÑAS -->
+                    <section>
+                        <h2 class="font-display text-3xl font-bold text-chocolate mb-4">Reseñas de alumnos</h2>
+                        <div class="space-y-3">
+                            ${[
+                                {n:'Ana R.', t:'Increíble, la chef explica todo con lujo de detalle.', r:5, seed:611},
+                                {n:'Luis M.', t:'Salí con mi caja de cupcakes y la técnica dominada.', r:5, seed:612},
+                                {n:'Pam G.', t:'Me encantó el lugar y el mandil de regalo. Volveré.', r:4, seed:613}
+                            ].map(rv => `<div class="bg-white p-4 rounded-lg border border-gray-100 flex gap-3">
+                                <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">${imgTag('person portrait ' + rv.n, rv.seed, 'w-full h-full object-cover')}</div>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between"><h4 class="font-bold text-sm">${rv.n}</h4><span class="text-dorado text-xs">${'★'.repeat(rv.r)}${'☆'.repeat(5-rv.r)}</span></div>
+                                    <p class="text-xs text-gray-600 mt-1">${rv.t}</p>
+                                </div>
+                            </div>`).join('')}
+                        </div>
+                    </section>
+                    <!-- FAQ -->
+                    <section>
+                        <h2 class="font-display text-3xl font-bold text-chocolate mb-4">Preguntas frecuentes</h2>
+                        <div class="space-y-2">
+                            ${[
+                                ['¿Necesito experiencia previa?','No, este curso parte desde cero.'],
+                                ['¿Qué debo llevar?','Solo ganas. Todo el material está incluido.'],
+                                ['¿Puedo cancelar?','Sí, sin costo hasta 48h antes de la clase.'],
+                                ['¿Recibo constancia?','Sí, verificable con folio y QR.']
+                            ].map(([q,a]) => `<details class="bg-white rounded-lg border border-gray-100 p-4">
+                                <summary class="font-bold text-chocolate cursor-pointer">${q}</summary>
+                                <p class="text-sm text-gray-600 mt-2">${a}</p>
+                            </details>`).join('')}
+                        </div>
+                    </section>
+                </div>
+                <div class="lg:col-span-1">
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-dorado/20 sticky top-24">
+                        <div class="flex justify-between items-end mb-6">
+                            <div>
+                                <span class="text-gray-400 text-sm line-through">$${Math.round(c.price*1.2)}</span>
+                                <div class="text-3xl font-bold text-chocolate">$${c.price} <span class="text-sm font-normal text-gray-500">MXN</span></div>
+                            </div>
+                            <div class="text-right">
+                                ${c.spotsLeft !== null ? `<div class="text-red-500 text-sm font-bold">¡Quedan ${c.spotsLeft}!</div>` : `<div class="text-eucalipto text-sm font-bold">Acceso vitalicio</div>`}
+                                <div class="text-xs text-gray-400">${c.date} · ${c.time}</div>
+                            </div>
+                        </div>
+                        ${c.replayPrice > 0 ? `
+                        <label class="block p-3 bg-crema rounded-lg border border-dorado/30 cursor-pointer hover:bg-white transition mb-4">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" checked class="accent-terracota">
+                                    <i class="fa-solid fa-video text-terracota"></i>
+                                    <span class="font-bold text-sm">Agregar Brûlée Replay</span>
+                                </div>
+                                <span class="font-bold text-sm text-terracota">+$${c.replayPrice}</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1 ml-6">Recomendado · Acceso vitalicio al video</p>
+                        </label>` : `<div class="p-3 bg-eucalipto/10 rounded-lg mb-4 text-center text-eucalipto font-bold text-sm"><i class="fa-solid fa-infinity mr-1"></i> Replay incluido</div>`}
+                        <div class="mb-4">
+                            <label class="block text-xs font-bold text-gray-500 mb-1">Cupón o Gift Card</label>
+                            <input type="text" placeholder="Código (ej. BRULEE10)" class="w-full border border-gray-200 rounded p-2 text-sm focus:border-dorado outline-none">
+                        </div>
+                        <button onclick="router('checkout')" class="btn-primary w-full py-4 rounded-lg font-bold text-lg shadow-lg mb-3">Reservar mi lugar</button>
+                        <p class="text-center text-xs text-gray-400">Cancelación gratuita 48h antes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    },
+
+    checkout: () => `
+        <div class="bg-crema min-h-screen py-10 px-4 fade-in">
+            <div class="max-w-5xl mx-auto">
+                <h1 class="font-display text-4xl font-bold text-chocolate mb-8 text-center">Finalizar Reserva</h1>
+                <div class="step-line flex items-center justify-between mb-12" data-progress="1" id="stepbar">
+                    <div class="step-dot flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-dorado text-white flex items-center justify-center font-bold">1</div>
+                        <span class="text-xs font-bold mt-2 text-chocolate">Resumen</span>
+                    </div>
+                    <div class="step-dot flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold">2</div>
+                        <span class="text-xs font-bold mt-2 text-gray-400">Datos</span>
+                    </div>
+                    <div class="step-dot flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold">3</div>
+                        <span class="text-xs font-bold mt-2 text-gray-400">Pago</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-2 bg-white p-6 md:p-8 rounded-xl shadow-sm">
+                        <div id="checkout-step-1">
+                            <h2 class="font-bold text-xl mb-4">Resumen de tu sesión</h2>
+                            <div class="flex gap-4 mb-6">
+                                <div class="w-24 h-24 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">${imgTag('cupcakes strawberries frosting', 801)}</div>
+                                <div>
+                                    <h3 class="font-bold text-chocolate">Cupcakes de Fresa & Buttercream</h3>
+                                    <p class="text-sm text-gray-500"><i class="fa-solid fa-calendar-day mr-1"></i>Sáb 12 Dic · 09:00 AM · Chef Laura</p>
+                                    <p class="text-sm text-gray-500"><i class="fa-solid fa-location-dot mr-1"></i>Zamora #511</p>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-xs font-bold text-gray-500 mb-1">Cupón o Gift Card</label>
+                                <div class="flex gap-2">
+                                    <input type="text" placeholder="Ingresa tu código" class="flex-grow border border-gray-300 rounded p-2 focus:border-dorado outline-none">
+                                    <button type="button" class="btn-gold px-4 rounded text-sm font-bold">Aplicar</button>
+                                </div>
+                            </div>
+                            <button onclick="checkoutStep(2)" class="btn-primary w-full py-3 rounded-lg font-bold mt-4">Continuar →</button>
+                        </div>
+                        <div id="checkout-step-2" class="hidden">
+                            <h2 class="font-bold text-xl mb-4">Tus datos</h2>
+                            <form onsubmit="event.preventDefault();checkoutStep(3)" class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre</label><input type="text" required class="w-full border border-gray-300 rounded p-2 focus:border-dorado outline-none"></div>
+                                    <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Apellido</label><input type="text" required class="w-full border border-gray-300 rounded p-2 focus:border-dorado outline-none"></div>
+                                </div>
+                                <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email</label><input type="email" required class="w-full border border-gray-300 rounded p-2 focus:border-dorado outline-none"></div>
+                                <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Teléfono (WhatsApp)</label><input type="tel" required class="w-full border border-gray-300 rounded p-2 focus:border-dorado outline-none"></div>
+                                <div class="pt-4 border-t border-gray-100">
+                                    <h3 class="font-bold text-sm mb-3">¿Necesitas factura (CFDI)?</h3>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div><label class="block text-xs font-bold text-gray-500 mb-1">RFC</label><input type="text" class="w-full border border-gray-300 rounded p-2 text-sm"></div>
+                                        <div><label class="block text-xs font-bold text-gray-500 mb-1">Uso de CFDI</label>
+                                            <select class="w-full border border-gray-300 rounded p-2 text-sm"><option>G03 - Gastos en general</option><option>D10 - Pagos por servicios educativos</option></select>
+                                        </div>
+                                        <div class="col-span-2"><label class="block text-xs font-bold text-gray-500 mb-1">Régimen fiscal</label>
+                                            <select class="w-full border border-gray-300 rounded p-2 text-sm"><option>612 - Personas físicas con actividades empresariales</option><option>605 - Sueldos y salarios</option><option>626 - RESICO</option></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-3 pt-2">
+                                    <button type="button" onclick="checkoutStep(1)" class="flex-1 border border-gray-300 rounded-lg py-3 font-bold hover:bg-crema">← Atrás</button>
+                                    <button type="submit" class="btn-primary flex-grow py-3 rounded-lg font-bold">Continuar →</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="checkout-step-3" class="hidden">
+                            <h2 class="font-bold text-xl mb-4">Método de pago</h2>
+                            <form onsubmit="event.preventDefault();router('success')" class="space-y-3">
+                                ${[
+                                    ['Tarjeta de Crédito/Débito','Procesado seguro por Stripe','cc-visa'],
+                                    ['SPEI','Referencia con temporizador 24h','building-columns'],
+                                    ['OXXO Pay','Ticket con vencimiento','store'],
+                                    ['Mercado Pago','Checkout seguro','wallet'],
+                                    ['PayPal','Pago con tu cuenta','paypal']
+                                ].map(([n,d,i],idx) => `<label class="flex items-center p-4 border rounded cursor-pointer hover:bg-crema transition ${idx===0?'border-dorado bg-crema/50':''}">
+                                    <input type="radio" name="payment" ${idx===0?'checked':''} class="accent-dorado mr-3">
+                                    <div class="flex-grow">
+                                        <span class="font-bold block text-sm">${n}</span>
+                                        <span class="text-xs text-gray-500">${d}</span>
+                                    </div>
+                                    <i class="fa${i.startsWith('cc')||i==='paypal'?'-brands':'-solid'} fa-${i} text-xl text-gray-400"></i>
+                                </label>`).join('')}
+                                <div class="flex gap-3 pt-2">
+                                    <button type="button" onclick="checkoutStep(2)" class="flex-1 border border-gray-300 rounded-lg py-3 font-bold hover:bg-crema">← Atrás</button>
+                                    <button type="submit" class="btn-primary flex-grow py-3 rounded-lg font-bold">Pagar y Confirmar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="md:col-span-1">
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-dorado/20 sticky top-24">
+                            <h3 class="font-bold text-lg mb-4 border-b pb-2">Tu Orden</h3>
+                            <div class="flex justify-between text-sm mb-2"><span>Cupcakes de Fresa</span><span>$850.00</span></div>
+                            <div class="flex justify-between text-sm mb-2 text-terracota"><span>Brûlée Replay</span><span>$399.00</span></div>
+                            <div class="flex justify-between text-sm mb-2 text-eucalipto"><span>Cupón BRULEE10</span><span>-$124.90</span></div>
+                            <div class="flex justify-between font-bold text-lg mt-4 pt-4 border-t"><span>Total</span><span>$1,124.10</span></div>
+                            <p class="text-xs text-gray-400 mt-4"><i class="fa-solid fa-lock mr-1"></i>Pago seguro · SSL 256-bit</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+
+    success: () => `
+        <div class="min-h-screen flex items-center justify-center bg-crema px-4 fade-in py-10">
+            <div class="bg-white p-8 md:p-12 rounded-2xl shadow-xl max-w-lg w-full text-center border-t-8 border-eucalipto">
+                <div class="w-20 h-20 bg-eucalipto/10 rounded-full flex items-center justify-center mx-auto mb-6 text-eucalipto text-4xl"><i class="fa-solid fa-check"></i></div>
+                <h1 class="font-display text-3xl font-bold text-chocolate mb-2">¡Reserva Confirmada!</h1>
+                <p class="text-gray-600 mb-6">Tu lugar está asegurado. Enviamos los detalles a tu correo y WhatsApp.</p>
+                <div class="bg-crema p-4 rounded-lg mb-6 text-left">
+                    <p class="text-xs text-gray-500 uppercase font-bold">Folio de reserva</p>
+                    <p class="text-xl font-mono text-chocolate">BRU-2026-8842</p>
+                </div>
+                <div class="bg-dorado/10 border border-dorado/30 p-4 rounded-lg text-left mb-6">
+                    <p class="text-sm font-bold text-chocolate mb-1">Bonus: Club Brûlée 1er mes gratis</p>
+                    <p class="text-xs text-gray-600">Ya activamos tu prueba del Club. Podrás acceder a todo el catálogo online.</p>
+                </div>
+                <div class="space-y-3">
+                    <button class="w-full border border-chocolate text-chocolate py-3 rounded-lg font-bold hover:bg-chocolate hover:text-white transition"><i class="fa-brands fa-google mr-2"></i>Añadir a Google Calendar</button>
+                    <button onclick="router('dashboard')" class="btn-primary w-full py-3 rounded-lg font-bold">Ir a Mi Portal</button>
+                    <button onclick="shareReferral()" class="w-full text-terracota text-sm font-bold hover:underline"><i class="fa-solid fa-share-nodes mr-1"></i>Compartir con quien te acompañe (+$100 crédito)</button>
+                </div>
+            </div>
+        </div>
+    `,
+
+    dashboard: () => {
+        setTimeout(initDashboardTabs, 50);
+        return `
+        <div class="bg-papel min-h-screen pb-20 fade-in">
+            <div class="bg-chocolate text-white py-8 px-4">
+                <div class="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-4">
+                    <div>
+                        <h1 class="font-display text-3xl">Hola, Ana María 👋</h1>
+                        <p class="opacity-70 text-sm">Bienvenida a tu cocina digital.</p>
+                    </div>
+                    <div class="bg-dorado/20 px-4 py-2 rounded-full border border-dorado/50">
+                        <span class="text-dorado font-bold text-sm">⭐ Miembro Club Brûlée</span>
+                    </div>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-4 gap-6">
+                <nav class="space-y-1">
+                    <button data-tab="cursos" class="tab-btn active w-full">📚 Mis Cursos</button>
+                    <button data-tab="videoteca" class="tab-btn w-full text-gray-600">🎬 Mi Videoteca</button>
+                    <button data-tab="constancias" class="tab-btn w-full text-gray-600">🎓 Mis Constancias</button>
+                    <button data-tab="membresia" class="tab-btn w-full text-gray-600">⭐ Mi Membresía</button>
+                    <button data-tab="referidos" class="tab-btn w-full text-gray-600">🎁 Mis Referidos</button>
+                    <button data-tab="ajustes" class="tab-btn w-full text-gray-600">⚙️ Ajustes</button>
+                </nav>
+                <div class="md:col-span-3 space-y-6">
+                    <!-- Tab Cursos -->
+                    <div data-tab-content="cursos">
+                        <div class="bg-gradient-to-r from-terracota to-rosa text-white p-6 rounded-xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+                            <div>
+                                <span class="bg-white/20 px-2 py-1 rounded text-xs font-bold uppercase">Próxima Clase</span>
+                                <h2 class="font-display text-2xl font-bold mt-2">Pan de Masa Madre Artesanal</h2>
+                                <p class="opacity-90 text-sm"><i class="fa-regular fa-clock mr-1"></i>Domingo 13 Dic · 08:00 AM</p>
+                                <p class="opacity-90 text-sm mt-1"><i class="fa-solid fa-location-dot mr-1"></i>Zamora #511 · Lleva: cabello recogido</p>
+                            </div>
+                            <div class="text-center bg-white/10 p-4 rounded-lg backdrop-blur-sm">
+                                <div class="text-2xl font-bold font-mono">04:12:30</div>
+                                <div class="text-xs uppercase tracking-widest">Para empezar</div>
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-xl text-chocolate mb-3">Cursos activos</h3>
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="p-5 border-b border-gray-100 flex justify-between items-center flex-wrap gap-3">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">${imgTag('sourdough bread', 701)}</div>
+                                    <div>
+                                        <h4 class="font-bold text-chocolate">Pan de Masa Madre</h4>
+                                        <div class="w-48 h-2 bg-gray-100 rounded-full mt-2"><div class="w-3/4 h-full bg-eucalipto rounded-full"></div></div>
+                                        <span class="text-xs text-gray-500 mt-1 block">75% completado</span>
+                                    </div>
+                                </div>
+                                <button onclick="router('lms', 2)" class="text-terracota font-bold text-sm hover:underline">Continuar →</button>
+                            </div>
+                            <div class="p-5 flex justify-between items-center flex-wrap gap-3">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">${imgTag('cupcakes pink frosting', 702)}</div>
+                                    <div>
+                                        <h4 class="font-bold text-chocolate">Cupcakes de Fresa</h4>
+                                        <span class="text-xs text-eucalipto font-bold bg-eucalipto/10 px-2 py-0.5 rounded">Completado</span>
+                                    </div>
+                                </div>
+                                <button onclick="router('lms',1)" class="text-terracota font-bold text-sm hover:underline">Repasar →</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tab Videoteca -->
+                    <div data-tab-content="videoteca" class="hidden">
+                        <h3 class="font-bold text-xl text-chocolate mb-3">Tu videoteca vitalicia</h3>
+                        <p class="text-sm text-gray-500 mb-4">Todos tus Replay + contenido del Club. Badge <span class="text-eucalipto font-bold">∞ Vitalicio</span></p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${[1,2,4,5].map(id => { const c = courses.find(x=>x.id===id); return `
+                            <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover cursor-pointer" onclick="router('lms',${id})">
+                                <div class="relative h-40 bg-gray-100">
+                                    ${imgTag(c.title + ' video', id*11)}
+                                    <div class="absolute inset-0 bg-chocolate/30 flex items-center justify-center"><i class="fa-solid fa-play text-white text-3xl"></i></div>
+                                    <span class="absolute top-2 right-2 bg-eucalipto text-white text-[10px] font-bold px-2 py-0.5 rounded">∞ Vitalicio</span>
+                                </div>
+                                <div class="p-4"><h4 class="font-bold text-chocolate">${c.title}</h4><p class="text-xs text-gray-500 mt-1">${c.duration} · ${c.chef}</p></div>
+                            </div>`}).join('')}
+                        </div>
+                    </div>
+                    <!-- Tab Constancias -->
+                    <div data-tab-content="constancias" class="hidden">
+                        <h3 class="font-bold text-xl text-chocolate mb-3">Mis constancias</h3>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                            <div class="flex justify-between items-center flex-wrap gap-3">
+                                <div>
+                                    <h4 class="font-bold text-chocolate">Repostería I: Fundamentos</h4>
+                                    <p class="text-xs text-gray-500">Folio B-2026-0142 · Emitido Feb 2026</p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="border border-terracota text-terracota px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-terracota hover:text-white transition"><i class="fa-solid fa-download mr-1"></i>PDF</button>
+                                    <button onclick="router('verify')" class="border border-dorado text-dorado px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-dorado hover:text-white transition"><i class="fa-solid fa-qrcode mr-1"></i>Verificar</button>
+                                    <button onclick="shareLinkedIn()" class="bg-[#0077b5] text-white px-3 py-1.5 rounded-lg text-sm font-bold hover:opacity-90"><i class="fa-brands fa-linkedin mr-1"></i>Compartir</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tab Membresía -->
+                    <div data-tab-content="membresia" class="hidden">
+                        <h3 class="font-bold text-xl text-chocolate mb-3">Tu membresía</h3>
+                        <div class="bg-gradient-to-r from-chocolate to-chocolate-light text-crema p-6 rounded-xl">
+                            <div class="flex justify-between items-start flex-wrap gap-3">
+                                <div>
+                                    <span class="bg-dorado text-chocolate px-2 py-0.5 rounded text-xs font-bold">ACTIVA</span>
+                                    <h4 class="font-display text-2xl text-dorado mt-2">Club Brûlée</h4>
+                                    <p class="text-sm opacity-80">Miembro desde Ene 2026 · Renueva 15 Dic 2026</p>
+                                </div>
+                                <button class="border border-crema px-4 py-2 rounded-full text-sm hover:bg-white/10">Cambiar plan</button>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 mt-6">
+                                <div class="bg-white/5 p-3 rounded-lg text-center"><div class="text-xl font-bold text-dorado">$199</div><div class="text-xs opacity-70">Mensual</div></div>
+                                <div class="bg-white/5 p-3 rounded-lg text-center"><div class="text-xl font-bold text-dorado">12</div><div class="text-xs opacity-70">Cursos incluidos</div></div>
+                                <div class="bg-white/5 p-3 rounded-lg text-center"><div class="text-xl font-bold text-dorado">∞</div><div class="text-xs opacity-70">Acceso</div></div>
+                            </div>
+                        </div>
+                        <button class="mt-4 text-terracota text-sm font-bold hover:underline">Ver historial de facturación →</button>
+                    </div>
+                    <!-- Tab Referidos -->
+                    <div data-tab-content="referidos" class="hidden">
+                        <h3 class="font-bold text-xl text-chocolate mb-3">Invita y gana</h3>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 text-center">
+                            <div class="text-4xl font-bold text-dorado mb-2">$300</div>
+                            <p class="text-sm text-gray-500 mb-4">Crédito acumulado por referidos</p>
+                            <div class="bg-crema p-3 rounded-lg flex items-center gap-2 max-w-md mx-auto">
+                                <input type="text" readonly value="https://brulee.mx/ref/ana-8842" class="flex-grow bg-transparent text-sm font-mono text-chocolate outline-none">
+                                <button onclick="navigator.clipboard && navigator.clipboard.writeText('https://brulee.mx/ref/ana-8842');alert('Link copiado')" class="btn-gold px-3 py-1 rounded text-xs font-bold">Copiar</button>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-3">Recibes $100 de crédito por cada amigo que reserve.</p>
+                        </div>
+                    </div>
+                    <!-- Tab Ajustes -->
+                    <div data-tab-content="ajustes" class="hidden">
+                        <h3 class="font-bold text-xl text-chocolate mb-3">Ajustes</h3>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-4">
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre</label><input type="text" value="Ana María Ramírez" class="w-full border border-gray-200 rounded p-2"></div>
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email</label><input type="email" value="ana@ejemplo.com" class="w-full border border-gray-200 rounded p-2"></div>
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Alergias / Preferencias</label><textarea rows="2" placeholder="Ej. intolerancia a la lactosa" class="w-full border border-gray-200 rounded p-2"></textarea></div>
+                            <div class="flex items-center gap-2"><input type="checkbox" checked class="accent-terracota"><span class="text-sm">Recibir notificaciones por WhatsApp</span></div>
+                            <button class="btn-primary px-6 py-2 rounded-lg font-bold">Guardar cambios</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    },
+
+    verify: () => `
+        <div class="min-h-screen bg-crema flex flex-col items-center justify-center p-4 fade-in py-10">
+            <div class="max-w-md w-full bg-white p-8 rounded-xl shadow-xl border-t-4 border-dorado text-center">
+                <div class="w-20 h-20 mx-auto rounded-full overflow-hidden border-4 border-dorado mb-4">
+                    ${imgTag('gold seal certificate award', 901)}
+                </div>
+                <h1 class="font-display text-3xl font-bold text-chocolate mb-2">Verificación de Diploma</h1>
+                <p class="text-gray-500 mb-8 text-sm">Ingresa el folio o escanea el QR para validar autenticidad.</p>
+                <form onsubmit="event.preventDefault(); document.getElementById('result').classList.remove('hidden');" class="mb-6">
+                    <div class="relative">
+                        <input type="text" value="B-2026-0142" class="w-full border border-gray-300 rounded-lg p-3 pl-10 focus:border-dorado outline-none font-mono text-center uppercase">
+                        <i class="fa-solid fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                    </div>
+                    <button type="submit" class="btn-primary w-full mt-4 py-3 rounded-lg font-bold">Verificar</button>
+                </form>
+                <div id="result" class="hidden bg-crema border border-dorado/30 p-6 rounded-lg text-left animate-fade-in-up">
+                    <div class="flex items-center gap-2 text-eucalipto font-bold mb-4 border-b border-dorado/20 pb-2"><i class="fa-solid fa-circle-check"></i> VERIFICADO</div>
+                    <p class="text-xs text-gray-500 uppercase font-bold">Alumno</p>
+                    <p class="text-lg font-bold text-chocolate mb-3">Ana María Ramírez López</p>
+                    <p class="text-xs text-gray-500 uppercase font-bold">Curso Acreditado</p>
+                    <p class="text-md font-display italic text-chocolate mb-3">"Repostería I: Fundamentos"</p>
+                    <p class="text-xs text-gray-500 uppercase font-bold">Periodo</p>
+                    <p class="text-sm text-chocolate mb-3">Feb – May 2026 · Emitido por Chef Laura Méndez</p>
+                    <div class="flex justify-between text-xs text-gray-400 mt-4 pt-3 border-t border-dorado/20"><span>Folio: B-2026-0142</span><span>Hash: 8f3a…c21</span></div>
+                    <div class="flex gap-2 mt-4">
+                        <button onclick="shareLinkedIn()" class="flex-1 text-xs border border-chocolate text-chocolate py-2 rounded font-bold hover:bg-chocolate hover:text-white transition">Compartir credencial</button>
+                        <button onclick="alert('Reporte enviado al comité académico.')" class="flex-1 text-xs border border-red-300 text-red-600 py-2 rounded font-bold hover:bg-red-50">Reportar irregularidad</button>
+                    </div>
+                </div>
+            </div>
+            <div class="max-w-md w-full mt-6 text-center text-xs text-gray-500">
+                <p>¿Eres empresa? <a href="#" onclick="event.preventDefault();alert('Padrón de egresados — demo')" class="text-terracota font-bold hover:underline">Consulta nuestro padrón de egresados</a></p>
+            </div>
+        </div>
+    `,
+
+    blog: () => {
+        setTimeout(() => initBlogFilters(), 50);
+        return `
+        <div class="bg-papel min-h-screen pb-20 fade-in">
+            <div class="bg-chocolate text-crema py-12 px-4 text-center">
+                <h1 class="font-display text-5xl mb-3">Bitácora Brûlée</h1>
+                <p class="opacity-80">Recetas, técnicas y vida escolar.</p>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 py-10">
+                <div class="flex flex-wrap gap-2 justify-center mb-8">
+                    ${['Todos','Técnicas','Recetas','Emprendimiento','Vida Brûlée','Kids & Teens'].map((c,i) => `<button data-blog-filter="${c}" class="blog-chip chip ${i===0?'bg-dorado text-chocolate':''}">${c}</button>`).join('')}
+                </div>
+                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    ${blogPosts.map(post => `
+                        <article data-cat="${post.category}" class="bg-white rounded-xl shadow-sm overflow-hidden card-hover cursor-pointer">
+                            <div class="h-48 bg-gray-100 relative">
+                                ${imgTag(post.title, post.seed)}
+                                <span class="absolute top-4 left-4 bg-white/90 px-3 py-1 text-[10px] font-bold uppercase rounded text-chocolate">${post.category}</span>
+                            </div>
+                            <div class="p-6">
+                                <h2 class="font-display text-xl font-bold text-chocolate mb-2 hover:text-terracota">${post.title}</h2>
+                                <p class="text-gray-500 text-sm mb-3 line-clamp-2">Descubre los secretos detrás de esta técnica adaptada a nuestros ingredientes locales...</p>
+                                <span class="text-terracota font-bold text-sm">Leer artículo →</span>
+                            </div>
+                        </article>`).join('')}
+                </div>
+            </div>
+        </div>`;
+    },
+
+    store: () => `
+        <div class="bg-papel min-h-screen pb-20 fade-in">
+            <div class="bg-chocolate text-crema py-12 px-4 text-center">
+                <h1 class="font-display text-5xl mb-3">Tienda Brûlée</h1>
+                <p class="opacity-80">Gift cards y kits para regalar sabor.</p>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 py-10">
+                <h2 class="font-display text-3xl font-bold text-chocolate mb-4">Gift Cards</h2>
+                <p class="text-sm text-gray-500 mb-6">Denominaciones de $500, $1,000, $1,500 o monto libre. Envío digital por email o WhatsApp al instante.</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+                    ${[500,1000,1500,'Libre'].map((v,i) => `<div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover cursor-pointer">
+                        <div class="h-32 bg-gradient-to-br from-terracota to-rosa relative flex items-center justify-center">
+                            <i class="fa-solid fa-gift text-white text-4xl"></i>
+                            <span class="absolute top-2 right-2 bg-white/90 text-chocolate text-xs font-bold px-2 py-0.5 rounded">Diseño ${i+1}</span>
+                        </div>
+                        <div class="p-4 text-center"><h3 class="font-bold text-chocolate">${typeof v==='number'?'$'+v:'Monto libre'}</h3><button class="text-terracota text-sm font-bold hover:underline mt-2">Comprar →</button></div>
+                    </div>`).join('')}
+                </div>
+                <h2 class="font-display text-3xl font-bold text-chocolate mb-4">Kits Brûlée</h2>
+                <p class="text-sm text-gray-500 mb-6">Caja de ingredientes + guía QR al video de la receta. Puente perfecto tienda → LMS.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    ${kitProducts.slice(0,3).map(k => `
+                    <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 card-hover">
+                        <div class="h-56 bg-gray-100">${imgTag(k.title + ' kit ingredients', k.seed)}</div>
+                        <div class="p-5">
+                            <h3 class="font-display text-xl font-bold text-chocolate">${k.title}</h3>
+                            <p class="text-sm text-gray-500 mt-1 mb-3">${k.desc}</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-lg font-bold text-chocolate">$${k.price}</span>
+                                <button class="btn-primary px-4 py-1.5 rounded-full text-sm font-bold">Agregar</button>
+                            </div>
+                        </div>
+                    </div>`).join('')}
+                </div>
+                <div class="mt-10 bg-dorado/10 border border-dorado/30 p-4 rounded-xl text-sm text-chocolate">
+                    <i class="fa-solid fa-truck mr-2 text-dorado"></i>Envío same-day en Coatzacoalcos · Nacional por paquetería
+                </div>
+            </div>
+        </div>
+    `,
+
+    quote: () => `
+        <div class="bg-crema min-h-screen py-10 px-4 fade-in">
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-8">
+                    <h1 class="font-display text-4xl font-bold text-chocolate">Cotiza tu evento</h1>
+                    <p class="text-gray-500 text-sm mt-2">Un chef de Brûlée te contacta en menos de 2 horas.</p>
+                </div>
+                <div class="step-line flex items-center justify-between mb-8" data-progress="1" id="qbar">
+                    ${[1,2,3,4].map((n,i) => `<div class="step-dot flex flex-col items-center">
+                        <div class="qdot w-10 h-10 rounded-full ${i===0?'bg-dorado text-white':'bg-gray-200 text-gray-500'} flex items-center justify-center font-bold">${n}</div>
+                        <span class="text-[10px] font-bold mt-1 ${i===0?'text-chocolate':'text-gray-400'}">${['Evento','Detalles','Estilo','Contacto'][i]}</span>
+                    </div>`).join('')}
+                </div>
+                <div id="quote-card" class="bg-white p-6 md:p-8 rounded-xl shadow-sm">
+                    <!-- STEP 1 -->
+                    <div class="qstep" data-step="1">
+                        <h2 class="font-bold text-xl mb-4">¿Qué celebras?</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            ${['Cumpleaños','Team building','Clase en casa','Baby shower','Corporativo','Otro'].map((t,i) => `
+                                <button onclick="this.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('border-terracota','bg-terracota/10'));this.classList.add('border-terracota','bg-terracota/10')" class="p-4 border-2 border-gray-200 rounded-lg hover:border-dorado transition text-center ${i===0?'border-terracota bg-terracota/10':''}">
+                                    <i class="fa-solid fa-${['birthday-cake','users','house','baby','building','star'][i]} text-2xl text-terracota mb-2"></i>
+                                    <div class="text-sm font-bold">${t}</div>
+                                </button>`).join('')}
+                        </div>
+                        <button onclick="quoteStep(2)" class="btn-primary w-full py-3 rounded-lg font-bold mt-6">Continuar →</button>
+                    </div>
+                    <!-- STEP 2 -->
+                    <div class="qstep hidden" data-step="2">
+                        <h2 class="font-bold text-xl mb-4">Detalles</h2>
+                        <div class="space-y-4">
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Fecha tentativa</label><input type="date" class="w-full border border-gray-300 rounded p-2"></div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nº de personas <span id="q-people-val" class="text-terracota">20</span></label>
+                                <input type="range" min="5" max="100" value="20" oninput="document.getElementById('q-people-val').textContent=this.value" class="w-full accent-terracota">
+                            </div>
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Niños incluidos</label><input type="number" value="0" min="0" class="w-full border border-gray-300 rounded p-2"></div>
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Duración deseada (horas)</label><select class="w-full border border-gray-300 rounded p-2"><option>2h</option><option selected>3h</option><option>4h</option><option>5h</option></select></div>
+                        </div>
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="quoteStep(1)" class="flex-1 border border-gray-300 rounded-lg py-3 font-bold hover:bg-crema">← Atrás</button>
+                            <button onclick="quoteStep(3)" class="btn-primary flex-grow py-3 rounded-lg font-bold">Continuar →</button>
+                        </div>
+                    </div>
+                    <!-- STEP 3 -->
+                    <div class="qstep hidden" data-step="3">
+                        <h2 class="font-bold text-xl mb-4">Estilo</h2>
+                        <div class="space-y-4">
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Categoría</label>
+                                <select class="w-full border border-gray-300 rounded p-2"><option>Repostería</option><option>Panadería</option><option>Cocina</option><option>Mixta</option></select>
+                            </div>
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nivel</label>
+                                <select class="w-full border border-gray-300 rounded p-2"><option>Iniciación</option><option>Intermedio</option><option>Avanzado</option></select>
+                            </div>
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Lugar</label>
+                                <select class="w-full border border-gray-300 rounded p-2"><option>En Brûlée (Zamora 511)</option><option>En tu sede (a domicilio)</option></select>
+                            </div>
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-2">Extras</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <label class="flex items-center gap-2 text-sm"><input type="checkbox" class="accent-terracota">Fotógrafo</label>
+                                    <label class="flex items-center gap-2 text-sm"><input type="checkbox" class="accent-terracota">Kit para llevar</label>
+                                    <label class="flex items-center gap-2 text-sm"><input type="checkbox" class="accent-terracota">Gift bags</label>
+                                    <label class="flex items-center gap-2 text-sm"><input type="checkbox" class="accent-terracota">Brindis</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 mt-6">
+                            <button onclick="quoteStep(2)" class="flex-1 border border-gray-300 rounded-lg py-3 font-bold hover:bg-crema">← Atrás</button>
+                            <button onclick="quoteStep(4)" class="btn-primary flex-grow py-3 rounded-lg font-bold">Continuar →</button>
+                        </div>
+                    </div>
+                    <!-- STEP 4 -->
+                    <div class="qstep hidden" data-step="4">
+                        <h2 class="font-bold text-xl mb-4">Contacto</h2>
+                        <form onsubmit="event.preventDefault();quoteSubmit()" class="space-y-3">
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre</label><input required type="text" class="w-full border border-gray-300 rounded p-2"></div>
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">WhatsApp</label><input required type="tel" class="w-full border border-gray-300 rounded p-2"></div>
+                            <div><label class="block text-xs font-bold text-gray-500 uppercase mb-1">Email</label><input required type="email" class="w-full border border-gray-300 rounded p-2"></div>
+                            <div class="bg-crema p-4 rounded-lg mt-4">
+                                <p class="text-xs text-gray-500 uppercase font-bold mb-1">Rango estimado</p>
+                                <p class="text-xl font-bold text-chocolate">$4,500 – $7,800 MXN</p>
+                                <p class="text-xs text-gray-500">Team building · 20 personas · 3h</p>
+                            </div>
+                            <div class="flex gap-3 pt-2">
+                                <button type="button" onclick="quoteStep(3)" class="flex-1 border border-gray-300 rounded-lg py-3 font-bold hover:bg-crema">← Atrás</button>
+                                <button type="submit" class="btn-primary flex-grow py-3 rounded-lg font-bold">Enviar solicitud</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- CONFIRM -->
+                    <div class="qstep hidden" data-step="5">
+                        <div class="text-center py-6">
+                            <div class="w-16 h-16 bg-eucalipto/10 rounded-full flex items-center justify-center mx-auto mb-4 text-eucalipto text-3xl"><i class="fa-solid fa-check"></i></div>
+                            <h2 class="font-display text-2xl font-bold text-chocolate mb-2">¡Solicitud enviada!</h2>
+                            <p class="text-sm text-gray-600 mb-4">Un chef de Brûlée te contacta en menos de 2 horas.</p>
+                            <div class="bg-crema p-4 rounded-lg mb-4 inline-block">
+                                <p class="text-xs text-gray-500 uppercase font-bold">Folio</p>
+                                <p class="text-lg font-mono text-chocolate">COT-2026-0142</p>
+                            </div>
+                            <button onclick="router('home')" class="btn-primary w-full py-3 rounded-lg font-bold mt-2">Volver al inicio</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `,
+
+    club: () => `
+        <div class="bg-papel min-h-screen pb-20 fade-in">
+            <div class="bg-gradient-to-br from-chocolate to-chocolate-light text-crema py-16 px-4 text-center">
+                <span class="bg-dorado text-chocolate px-3 py-1 rounded text-xs font-bold uppercase">Suscripción</span>
+                <h1 class="font-display text-5xl md:text-6xl mt-4 mb-3 text-dorado">Club Brûlée</h1>
+                <p class="text-xl opacity-90 mb-2">Toda la escuela en tu cocina.</p>
+                <p class="text-3xl font-bold mt-6">$199 <span class="text-lg font-normal opacity-70">/mes</span></p>
+            </div>
+            <div class="max-w-5xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h2 class="font-display text-3xl font-bold text-chocolate mb-6">Qué incluye</h2>
+                    <ul class="space-y-3">
+                        ${[
+                            'Acceso a todo el catálogo online',
+                            'Descuentos en tiendas aliadas',
+                            'Prioridad en reservas presenciales',
+                            'Contenido nuevo cada mes',
+                            'Comunidad privada de miembros',
+                            'Cancelación en cualquier momento'
+                        ].map(t => `<li class="flex gap-2 items-start"><i class="fa-solid fa-check text-eucalipto mt-1"></i><span>${t}</span></li>`).join('')}
+                    </ul>
+                    <div class="mt-8 rounded-xl overflow-hidden">
+                        <div class="h-56">${imgTag('cooking class group pastry learning', 951)}</div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg border border-dorado/20 h-fit sticky top-24">
+                    <h3 class="font-display text-2xl font-bold text-chocolate mb-4">Únete hoy</h3>
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-4xl font-bold text-chocolate">$199</span>
+                        <span class="text-gray-500">/mes</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-6">Cancela cuando quieras. Sin cargos ocultos.</p>
+                    <form onsubmit="event.preventDefault();router('success')" class="space-y-3">
+                        <input type="text" placeholder="Nombre completo" required class="w-full border border-gray-300 rounded p-3">
+                        <input type="email" placeholder="Email" required class="w-full border border-gray-300 rounded p-3">
+                        <input type="tel" placeholder="WhatsApp" required class="w-full border border-gray-300 rounded p-3">
+                        <button class="btn-primary w-full py-3 rounded-lg font-bold">Suscribirme al Club</button>
+                    </form>
+                    <p class="text-xs text-center text-gray-400 mt-3">1er mes gratis con tu primera reserva.</p>
+                </div>
+            </div>
+        </div>
+    `,
+
+    lms: (id) => {
+        const c = courses.find(x => x.id == id) || courses[0];
+        return `
+        <div class="bg-papel min-h-screen fade-in">
+            <div class="bg-chocolate text-white py-4 px-4">
+                <div class="max-w-7xl mx-auto flex justify-between items-center">
+                    <div>
+                        <p class="text-xs opacity-70">Aula virtual · ${c.chef}</p>
+                        <h1 class="font-display text-2xl">${c.title}</h1>
+                    </div>
+                    <button onclick="router('dashboard')" class="text-sm border border-white/40 px-3 py-1 rounded-full hover:bg-white/10">← Mi portal</button>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Sidebar modules -->
+                <aside class="space-y-2">
+                    <h3 class="font-bold text-chocolate text-sm uppercase tracking-wider mb-3">Módulos</h3>
+                    ${[
+                        ['Módulo 1','Bienvenida y mise en place'],
+                        ['Módulo 2','Técnica principal'],
+                        ['Módulo 3','Horneado y acabado'],
+                        ['Módulo 4','Proyecto final']
+                    ].map(([m,t],i) => `
+                        <button onclick="document.querySelectorAll('.lms-mod').forEach(b=>b.classList.remove('bg-white','font-bold','border-l-4','border-dorado'));this.classList.add('bg-white','font-bold','border-l-4','border-dorado')" class="lms-mod w-full text-left p-3 rounded-lg ${i===0?'bg-white font-bold border-l-4 border-dorado':'hover:bg-white/50'} transition">
+                            <div class="text-[10px] text-dorado uppercase">${m}</div>
+                            <div class="text-sm text-chocolate">${t}</div>
+                            <div class="text-xs text-gray-500 mt-1">${i===0?'✓ Completado':i===1?'En curso':'Pendiente'}</div>
+                        </button>`).join('')}
+                    <div class="mt-4 bg-white p-4 rounded-lg">
+                        <p class="text-xs text-gray-500 mb-1">Progreso general</p>
+                        <div class="h-2 bg-gray-100 rounded-full"><div class="w-1/3 h-full bg-dorado rounded-full"></div></div>
+                        <p class="text-xs text-chocolate font-bold mt-1">33% completado</p>
+                    </div>
+                </aside>
+                <!-- Player -->
+                <div class="md:col-span-2 space-y-4">
+                    <div class="bg-chocolate rounded-xl overflow-hidden relative aspect-video">
+                        ${imgTag('cooking lesson video recording kitchen', 971, 'w-full h-full object-cover opacity-70')}
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <button class="w-20 h-20 bg-white/90 rounded-full flex items-center justify-center hover:scale-110 transition"><i class="fa-solid fa-play text-terracota text-3xl ml-1"></i></button>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-chocolate to-transparent text-white text-xs">
+                            <div class="h-1 bg-white/30 rounded-full mb-2"><div class="w-1/4 h-full bg-dorado rounded-full"></div></div>
+                            <div class="flex justify-between"><span>04:12 / 18:30</span><span>1.0x · HD</span></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm">
+                        <h3 class="font-bold text-chocolate mb-2">Módulo 2 · Técnica principal</h3>
+                        <p class="text-sm text-gray-600 mb-3">En esta lección dominarás el punto exacto del buttercream y las técnicas de decoración con manga.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="text-xs px-3 py-1 rounded-full bg-crema border border-dorado/30"><i class="fa-solid fa-check mr-1 text-eucalipto"></i>Marcar como completado</button>
+                            <button class="text-xs px-3 py-1 rounded-full bg-crema border border-dorado/30"><i class="fa-solid fa-bookmark mr-1 text-terracota"></i>Guardar nota</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Recursos -->
+                <aside class="space-y-3">
+                    <div class="bg-white p-4 rounded-xl shadow-sm">
+                        <h4 class="font-bold text-chocolate text-sm mb-2"><i class="fa-solid fa-file-pdf text-terracota mr-1"></i>Recursos</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#" class="text-chocolate hover:text-terracota">📄 Receta imprimible PDF</a></li>
+                            <li><a href="#" class="text-chocolate hover:text-terracota">🛒 Lista de insumos</a></li>
+                            <li><a href="#" class="text-chocolate hover:text-terracota">📊 Presentación de la clase</a></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm">
+                        <h4 class="font-bold text-chocolate text-sm mb-2"><i class="fa-solid fa-circle-question text-terracota mr-1"></i>Q&A con el chef</h4>
+                        <p class="text-xs text-gray-500 mb-2">Respondemos en menos de 24h.</p>
+                        <textarea rows="2" placeholder="Escribe tu pregunta..." class="w-full border border-gray-200 rounded p-2 text-xs mb-2"></textarea>
+                        <button class="btn-primary w-full py-1.5 rounded text-xs font-bold">Enviar</button>
+                        <p class="text-[10px] text-gray-400 mt-2"><i class="fa-solid fa-check-circle text-eucalipto"></i> Chef verificado</p>
+                    </div>
+                    <div class="bg-dorado/10 border border-dorado/30 p-4 rounded-xl text-sm">
+                        <p class="font-bold text-chocolate mb-1">Sube tu proyecto final</p>
+                        <p class="text-xs text-gray-600 mb-2">Completa 80% + sube tu proyecto para liberar tu constancia.</p>
+                        <button class="w-full border border-dorado text-dorado py-1.5 rounded text-xs font-bold hover:bg-dorado hover:text-white transition">Subir foto/video</button>
+                    </div>
+                </aside>
+            </div>
+        </div>`;
+    },
+
+    booking: () => views.catalog(),
+
+    login: () => `
+        <div class="min-h-screen bg-crema flex items-center justify-center p-4 fade-in">
+            <div class="bg-white p-8 md:p-10 rounded-xl shadow-xl max-w-md w-full">
+                <h1 class="font-display text-3xl font-bold text-chocolate text-center mb-6">Entrar a Brûlée</h1>
+                <form onsubmit="event.preventDefault();router('dashboard')" class="space-y-3">
+                    <input type="email" required placeholder="Email" class="w-full border border-gray-300 rounded p-3 focus:border-dorado outline-none">
+                    <input type="password" required placeholder="Contraseña" class="w-full border border-gray-300 rounded p-3 focus:border-dorado outline-none">
+                    <button class="btn-primary w-full py-3 rounded-lg font-bold">Entrar</button>
+                </form>
+                <div class="text-center text-xs text-gray-400 my-4">o continúa con</div>
+                <div class="grid grid-cols-3 gap-2">
+                    <button class="border border-gray-300 py-2 rounded-lg hover:bg-crema"><i class="fa-brands fa-google text-red-500"></i></button>
+                    <button class="border border-gray-300 py-2 rounded-lg hover:bg-crema"><i class="fa-brands fa-apple"></i></button>
+                    <button class="border border-gray-300 py-2 rounded-lg hover:bg-crema"><i class="fa-solid fa-mobile-screen text-terracota"></i></button>
+                </div>
+                <p class="text-center text-sm text-gray-500 mt-6">¿No tienes cuenta? <a href="#" class="text-terracota font-bold">Regístrate</a></p>
+            </div>
+        </div>
+    `
+    };
+
+    /* ============================================================
+       FUNCIONES AUXILIARES
+    ============================================================ */
+    function applyFilters(preset = null) {
+        let mods, nivs, cats;
+        if (preset) {
+            mods = preset.modalidad; nivs = preset.nivel; cats = preset.categoria;
+        } else {
+            mods = [...document.querySelectorAll('[data-filter="modalidad"]:checked')].map(x=>x.value);
+            nivs = [...document.querySelectorAll('[data-filter="nivel"]:checked')].map(x=>x.value);
+            cats = [...document.querySelectorAll('[data-filter="categoria"]:checked')].map(x=>x.value);
+        }
+        let f = courses;
+        if (mods.length) f = f.filter(c => mods.includes(c.modalidad));
+        if (nivs.length) f = f.filter(c => nivs.includes(c.nivel));
+        if (cats.length) f = f.filter(c => cats.includes(c.category));
+        const grid = document.getElementById('course-grid');
+        const count = document.getElementById('result-count');
+        if (!grid) return;
+        count.textContent = f.length;
+        if (f.length === 0) {
+            grid.innerHTML = `<div class="col-span-full text-center py-16 bg-white rounded-xl border border-dashed border-gray-300">
+                <i class="fa-solid fa-cookie-bite text-4xl text-gray-300 mb-4"></i>
+                <h3 class="font-display text-2xl text-gray-500">No hay clases con esos filtros…</h3>
+                <p class="text-gray-400 mt-2 mb-4">Pero tenemos un cupón del 10% para ti si nos dejas tu email.</p>
+                <div class="max-w-sm mx-auto flex gap-2">
+                    <input type="email" placeholder="tu@email.com" class="flex-grow border border-gray-300 rounded p-2 text-sm">
+                    <button class="btn-primary px-4 rounded text-sm font-bold">Recibir cupón</button>
+                </div>
+            </div>`;
+        } else {
+            grid.innerHTML = f.map(c => createCourseCard(c)).join('');
+        }
+    }
+
+    function checkoutStep(n) {
+        document.querySelectorAll('#checkout-step-1,#checkout-step-2,#checkout-step-3').forEach(el => el.classList.add('hidden'));
+        document.getElementById('checkout-step-' + n).classList.remove('hidden');
+        const bar = document.getElementById('stepbar');
+        if (bar) bar.dataset.progress = n;
+        const dots = bar.querySelectorAll('.step-dot > div');
+        dots.forEach((d,i) => {
+            if (i < n) { d.className = 'w-10 h-10 rounded-full bg-dorado text-white flex items-center justify-center font-bold'; }
+            else { d.className = 'w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold'; }
+        });
+    }
+
+    function quoteStep(n) {
+        document.querySelectorAll('.qstep').forEach(el => el.classList.add('hidden'));
+        const target = document.querySelector(`.qstep[data-step="${n}"]`);
+        if (target) target.classList.remove('hidden');
+        const bar = document.getElementById('qbar');
+        if (bar) bar.dataset.progress = Math.min(n,3);
+        document.querySelectorAll('.qdot').forEach((d,i) => {
+            if (i < n) { d.className = 'qdot w-10 h-10 rounded-full bg-dorado text-white flex items-center justify-center font-bold'; }
+            else { d.className = 'qdot w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold'; }
+        });
+    }
+    function quoteSubmit() { quoteStep(5); }
+
+    function initDashboardTabs() {
+        document.querySelectorAll('[data-tab]').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('[data-tab]').forEach(b => { b.classList.remove('active'); b.classList.add('text-gray-600'); });
+                btn.classList.add('active'); btn.classList.remove('text-gray-600');
+                document.querySelectorAll('[data-tab-content]').forEach(el => el.classList.add('hidden'));
+                const c = document.querySelector(`[data-tab-content="${btn.dataset.tab}"]`);
+                if (c) c.classList.remove('hidden');
+            };
+        });
+    }
+    function initBlogFilters() {
+        document.querySelectorAll('[data-blog-filter]').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('[data-blog-filter]').forEach(b => b.classList.remove('bg-dorado','text-chocolate'));
+                btn.classList.add('bg-dorado','text-chocolate');
+                const cat = btn.dataset.blogFilter;
+                document.querySelectorAll('[data-cat]').forEach(el => {
+                    el.style.display = (cat === 'Todos' || el.dataset.cat === cat) ? '' : 'none';
+                });
+            };
+        });
+    }
+    function shareLinkedIn() { window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(location.href), '_blank'); }
+    function shareReferral() { alert('Link de referido copiado: https://brulee.mx/ref/ana-8842 — recibirás $100 de crédito cuando reserven.'); }
+    function closeCookies(ok) {
+        localStorage.setItem('cookie_pref', ok ? 'accepted' : 'rejected');
+        document.getElementById('cookie').classList.add('hidden');
+    }
+
+    /* ============================================================
+       ROUTER
+    ============================================================ */
+    function setWaContext(page) {
+        const msgs = {
+            home: 'Hola Brûlée, quiero información sobre sus cursos.',
+            catalog: 'Hola, me interesa una clase del catálogo.',
+            store: 'Hola, quiero comprar una gift card / kit.',
+            verify: 'Hola, necesito verificar un diploma.',
+            quote: 'Hola, quiero cotizar un evento.',
+            club: 'Hola, quiero unirme al Club Brûlée.'
+        };
+        const num = '529211388616';
+        document.getElementById('wa-float').href = `https://wa.me/${num}?text=${encodeURIComponent(msgs[page] || msgs.home)}`;
+    }
+
+    function router(route, param = null) {
+        const root = document.getElementById('app-root');
+        window.scrollTo(0, 0);
+        root.innerHTML = '<div class="h-screen flex items-center justify-center"><div class="loader"></div></div>';
+        setTimeout(() => {
+            try {
+                if (route === 'home') root.innerHTML = views.home();
+                else if (route === 'catalog') root.innerHTML = views.catalog();
+                else if (route === 'catalog-online') root.innerHTML = views.catalog('online');
+                else if (route === 'catalog-kids') root.innerHTML = views.catalog('kids');
+                else if (route === 'detail') root.innerHTML = views.courseDetail(param);
+                else if (route === 'checkout') root.innerHTML = views.checkout();
+                else if (route === 'success') root.innerHTML = views.success();
+                else if (route === 'dashboard') root.innerHTML = views.dashboard();
+                else if (route === 'verify') root.innerHTML = views.verify();
+                else if (route === 'blog') root.innerHTML = views.blog();
+                else if (route === 'store') root.innerHTML = views.store();
+                else if (route === 'quote') root.innerHTML = views.quote();
+                else if (route === 'club') root.innerHTML = views.club();
+                else if (route === 'lms') root.innerHTML = views.lms(param);
+                else if (route === 'login') root.innerHTML = views.login();
+                else if (route === 'booking') root.innerHTML = views.catalog();
+                else root.innerHTML = views.home();
+                setWaContext(route.split('-')[0]);
+                // if catalog with preset, ensure filters applied after render
+                if (route.startsWith('catalog')) {
+                    const preset = route === 'catalog-online' ? {modalidad:['Online grabado'],nivel:[],categoria:[]} :
+                                   route === 'catalog-kids' ? {modalidad:[],nivel:[],categoria:['Kids & Teens']} :
+                                   {modalidad:[],nivel:[],categoria:[]};
+                    setTimeout(() => applyFilters(preset), 30);
+                }
+            } catch (e) {
+                console.error(e);
+                root.innerHTML = '<div class="p-20 text-center"><h1 class="text-3xl mb-4">Ups, algo pasó</h1><button onclick="router(\'home\')" class="btn-primary px-6 py-2 rounded-full">Volver al inicio</button></div>';
+            }
+        }, 200);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!localStorage.getItem('cookie_pref')) {
+            setTimeout(() => document.getElementById('cookie').classList.remove('hidden'), 800);
+        }
+        router('home');
+    });
+    </script>
+</body>
+</html>
